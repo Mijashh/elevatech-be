@@ -6,8 +6,7 @@ from django.db import models
 
 class UserRoles(models.TextChoices):
     STUDENT = 'student', 'Student'
-    ORGANIZATION = 'organization', 'Organization'
-
+    COMPANY = 'company', 'Company'
 
 class CustomUserManager(BaseUserManager):
     def create_user(
@@ -30,7 +29,7 @@ class CustomUserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
-        extra_fields.setdefault("role", UserRoles.ORGANIZATION)  # Default role for superuser
+        extra_fields.setdefault("role", UserRoles.STUDENT)  # Default role for superuser
         return self.create_user(email, password, **extra_fields)
 
 

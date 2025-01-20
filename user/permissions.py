@@ -1,5 +1,7 @@
 from rest_framework import permissions
+
 from .models import UserRoles
+
 
 class IsStudent(permissions.BasePermission):
     """
@@ -12,7 +14,7 @@ class IsStudent(permissions.BasePermission):
             request.user.role == UserRoles.STUDENT
         )
 
-class IsOrganization(permissions.BasePermission):
+class IsCompany(permissions.BasePermission):
     """
     Permission check for organization role.
     """
@@ -20,7 +22,7 @@ class IsOrganization(permissions.BasePermission):
         return bool(
             request.user and
             request.user.is_authenticated and
-            request.user.role == UserRoles.ORGANIZATION
+            request.user.role == UserRoles.COMPANY
         )
 
 class RoleBasedPermission(permissions.BasePermission):

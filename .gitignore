@@ -1,1 +1,7 @@
 env
+*.pyc
+.idea
+elevatech/settings/env.py
+*.sqlite3
+.vscode/
+env
