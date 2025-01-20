@@ -1,9 +1,11 @@
 from rest_framework import serializers
+
 from .models import User, UserRoles
+
 
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
-    username = serializers.CharField(source='name')  # map username to name field
+    username = serializers.CharField(source='name') 
     
     class Meta:
         model = User
@@ -17,3 +19,5 @@ class UserCreateSerializer(serializers.ModelSerializer):
         if value not in [UserRoles.STUDENT, UserRoles.COMPANY]:
             raise serializers.ValidationError("Invalid role selected")
         return value
+
+    
