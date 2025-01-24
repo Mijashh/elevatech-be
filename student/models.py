@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 
 from user.models import User
+from company.models import Job  
 
 
 class Student(models.Model):
@@ -43,3 +44,24 @@ class Student(models.Model):
 
     def __str__(self):
         return self.full_name
+
+
+class Application(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    ]
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='applications')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    applied_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Prevent duplicate applications for the same job by the same student
+        unique_together = ['job', 'student']
+
+    def __str__(self):
+        return f"{self.student.full_name} - {self.job.title}"
