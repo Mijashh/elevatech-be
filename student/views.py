@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated
 
 from company.models import Job
 
@@ -15,7 +14,6 @@ from .serializers import (
 # Create your views here.
 
 class StudentViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
     queryset = Student.objects.all()
     
     def get_serializer_class(self):
@@ -28,9 +26,9 @@ class StudentViewSet(viewsets.ModelViewSet):
 
 
 class ApplicationViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
+        # import ipdb; ipdb.set_trace()
         # If user is a student, show only their applications
         if hasattr(self.request.user, 'student'):
             return Application.objects.filter(student=self.request.user.student)

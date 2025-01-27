@@ -36,19 +36,12 @@ class AuthViewSet(viewsets.GenericViewSet):
                 if user.role == UserRoles.COMPANY:
                     Company.objects.create(
                         user=user,
-                        company_name=validated_data.get('company_name', ''),
-                        industry=validated_data.get('industry', ''),
-                        location=validated_data.get('location', ''),
-                        description=validated_data.get('description', ''),
+                        company_name=validated_data.get('name', ''),
                     )
                 else:
                     Student.objects.create(
                         user=user,
-                        full_name=validated_data.get('full_name', ''),
-                        education=validated_data.get('education', ''),
-                        skills=validated_data.get('skills', []),
-                        experience=validated_data.get('experience', ''),
-                        location=validated_data.get('location', ''),
+                        full_name=validated_data.get('name', ''),
                     )
             
             return Response({
@@ -67,6 +60,7 @@ class AuthViewSet(viewsets.GenericViewSet):
             }, status=status.HTTP_400_BAD_REQUEST)
         
         user = authenticate(email=email, password=password)
+        student = Student.objects.filter(user=user).first()
         
         if user:
             token, _ = Token.objects.get_or_create(user=user)
@@ -76,7 +70,8 @@ class AuthViewSet(viewsets.GenericViewSet):
                     'id': user.id,
                     'email': user.email,
                     'name': user.name,
-                    'role': user.role
+                    'role': user.role,
+                    'student_id': student.id if student else None
                 }
             }, status=status.HTTP_200_OK)
             
